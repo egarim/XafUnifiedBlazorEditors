@@ -11,9 +11,9 @@ using XafVsCodeEditor;
 namespace XafUnifiedBlazorEditors.Blazor.Server.Editors
 {
     [PropertyEditor(typeof(IMonacoEditorData),  XafMonacoEditorAlias.EditorAlias, true)]
-    public class CodePropertyEditor : BlazorPropertyEditorBase, IComplexViewItem
+    public class MonacoPropertyEditorBlazor : BlazorPropertyEditorBase, IComplexViewItem
     {
-        public CodePropertyEditor(Type objectType, IModelMemberViewItem model) : base(objectType, model) { }
+        public MonacoPropertyEditorBlazor(Type objectType, IModelMemberViewItem model) : base(objectType, model) { }
 
         IObjectSpace _objectSpace;
         XafApplication _application;
