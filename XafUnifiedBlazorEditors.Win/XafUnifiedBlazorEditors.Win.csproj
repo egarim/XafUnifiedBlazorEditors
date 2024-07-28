@@ -42,11 +42,17 @@
 	</ItemGroup>
 
 
+	<!--WebView references needed-->
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.WindowsForms" Version="8.0.70" />
-		<!--<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+		<!-- 
+		
+		Do not use this packages to try to use cshtml files in a WinForms application, they will break the web view functionality
+		
+		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.5" />-->
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.5" />
+		-->
 	</ItemGroup>
 
 	<ItemGroup>
