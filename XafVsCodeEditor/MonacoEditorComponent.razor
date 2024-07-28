@@ -1,0 +1,8 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using BlazorMonaco
+
+@inject Microsoft.JSInterop.IJSRuntime JS
+
+
+<MonacoEditor @ref="_editor" Id="EditorId" ConstructionOptions="EditorConstructionOptions" OnDidInit="EditorOnDidInit" OnContextMenu="OnContextMenu" OnDidChangeModelContent="ModelContentChange" />
+
