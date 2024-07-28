@@ -1,7 +1,7 @@
 # XafUnifiedBlazorEditors
 
-This repo demonstrates how to use Monaco Editor in XAF Blazor and WinForms applications.The idea is to have
-a unified editor for both platforms.
+This repo demonstrates how to use Monaco Editor in XAF Blazor and WinForms applications
+The idea is to render a shared component for both platforms.
 
 ![Blazor](XafMonacoEditorBlazor.gif) 
 
