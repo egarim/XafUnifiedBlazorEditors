@@ -59,7 +59,7 @@
             }
 
             parameters.Add("Value", PropertyValue);
-            control.RootComponents.Add<Component1>("#app", parameters);
+            control.RootComponents.Add<MonacoEditorComponent>("#app", parameters);
 
             control.Size = new System.Drawing.Size(300, 300);
             return control;
