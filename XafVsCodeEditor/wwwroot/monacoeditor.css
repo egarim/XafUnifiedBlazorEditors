@@ -1,7 +1,50 @@
-﻿
-.monaco-editor-container {
-    height: 500px;
-    border: 1px solid gray;
+﻿.monaco-editor-container {
+    height: 400px;
+    min-height: 200px;
+    width: 100%;
+    border: 1px solid #d3d3d3;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.monaco-editor-container .monaco-editor {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.monaco-editor-container .monaco-editor .overflow-guard {
+    border-radius: 3px;
+}
+
+/* XAF specific styling */
+.monaco-editor-container.xaf-property-editor {
+    height: 300px;
+    min-height: 150px;
+}
+
+/* Blazor WebView specific styling */
+.monaco-editor-container.blazor-webview {
+    height: 100%;
+    min-height: 250px;
+    border: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .monaco-editor-container {
+        height: 250px;
+        min-height: 150px;
+    }
+}
+
+/* Theme-specific borders */
+.monaco-editor-container.vs-dark {
+    border-color: #3e3e3e;
+}
+
+.monaco-editor-container.hc-black {
+    border-color: #6fc3df;
 }
 
 .decorationGlyphMarginClass {
@@ -11,16 +54,26 @@
 .decorationContentClass {
     background: lightblue;
 }
-/*.boxsizingBorder {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-     margin:5px 0;
-}*/
-textarea
-{
-  border:1px solid #999999;
-  width:100%;
- 
-  padding:3px;
+
+/* Ensure proper textarea styling when Monaco is not available */
+textarea {
+    border: 1px solid #999999;
+    width: 100%;
+    padding: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Fix for XAF property editor container */
+.dx-field-item-content .monaco-editor-container {
+    margin: 0;
+}
+
+/* Ensure the editor fills available space in XAF */
+.dx-blazor-property-editor .monaco-editor-container {
+    height: 250px;
+    width: 100%;
 }

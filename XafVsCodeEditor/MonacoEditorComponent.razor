@@ -3,6 +3,12 @@
 
 @inject Microsoft.JSInterop.IJSRuntime JS
 
-
-<MonacoEditor @ref="_editor" Id="EditorId" ConstructionOptions="EditorConstructionOptions" OnDidInit="EditorOnDidInit" OnContextMenu="OnContextMenu" OnDidChangeModelContent="ModelContentChange" />
+<div class="monaco-editor-container" style="@ContainerStyle">
+    <MonacoEditor @ref="_editor" 
+                  Id="EditorId" 
+                  ConstructionOptions="EditorConstructionOptions" 
+                  OnDidInit="EditorOnDidInit" 
+                  OnContextMenu="OnContextMenu" 
+                  OnDidChangeModelContent="ModelContentChange" />
+</div>
 

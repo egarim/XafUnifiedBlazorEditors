@@ -11,6 +11,7 @@
 		<FileVersion>1.0.0.0</FileVersion>
 		<Configurations>Debug;Release;EasyTest</Configurations>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 	<ItemGroup>
 		<Using Include="DevExpress.ExpressApp.ListView" Alias="ListView" />

@@ -18,75 +18,78 @@ namespace XafVsCodeEditor
         public const string EditorAlias = "CodePropertyEditor";
 
         public string EditorId { get; set; }
+        
         public MonacoEditorComponent()
         {
-
-
             EditorId = Guid.NewGuid().ToString();
         }
+        
         private MonacoEditor _editor { get; set; }
         public MonacoTheme SelectedTheme { get; set; }
         public List<MonacoTheme> Themes { get; set; }
 
+        // Size parameters for flexible sizing
+        [Parameter] public string Height { get; set; } = "400px";
+        [Parameter] public string Width { get; set; } = "100%";
+
+        private string ContainerStyle => $"height: {Height}; width: {Width}; min-height: 200px;";
         private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
         {
             var options = new StandaloneEditorConstructionOptions();
-            options.Language = Value?.Language;
-            options.FontSize = 25;
+            options.Language = Value?.Language ?? "markdown";
+            options.FontSize = 14; // More reasonable default font size
+            options.AutomaticLayout = true; // Important for responsive sizing
             return options;
         }
+        
         public void SetFontSize(int FontSize)
         {
-            _editor.UpdateOptions(new StandaloneEditorConstructionOptions() { FontSize = FontSize });
+            _editor?.UpdateOptions(new StandaloneEditorConstructionOptions() { FontSize = FontSize });
         }
 
         private async Task EditorOnDidInit(MonacoEditorBase editor)
         {
             SetEditorValue();
-            //this.SelectedTheme=Themes.FirstOrDefault(t=>t.PropertyValue==componentModel.SourceCode.Theme);
             SelectedTheme = Themes.FirstOrDefault(t => t.PropertyValue == "vs");
-            SelectedThemeChanged.Invoke(SelectedTheme);
+            SelectedThemeChanged?.Invoke(SelectedTheme);
 
             await _editor.AddCommand((int)KeyMode.CtrlCmd | (int)KeyCode.KEY_H, async (editor, keyCode) =>
             {
-               
-
-
-
+                // Add custom commands here
             });
 
             var newDecorations = new ModelDeltaDecoration[]
             {
-            new ModelDeltaDecoration
-            {
-                Range = new BlazorMonaco.Range(3,1,3,1),
-                Options = new ModelDecorationOptions
+                new ModelDeltaDecoration
                 {
-                    IsWholeLine = true,
-                    ClassName = "decorationContentClass",
-                    GlyphMarginClassName = "decorationGlyphMarginClass"
+                    Range = new BlazorMonaco.Range(3,1,3,1),
+                    Options = new ModelDecorationOptions
+                    {
+                        IsWholeLine = true,
+                        ClassName = "decorationContentClass",
+                        GlyphMarginClassName = "decorationGlyphMarginClass"
+                    }
                 }
-            }
             };
 
+            // Trigger layout update after initialization
+            await Task.Delay(100);
+            await _editor.Layout();
         }
 
         private string[] decorationIds;
 
         public Action<MonacoTheme> SelectedThemeChanged { get; set; }
         IMonacoEditorData componentModel;
+        
         [Parameter]
         public IMonacoEditorData Value
         {
-            get
-            {
-                return componentModel;
-            }
+            get => componentModel;
             set
             {
                 componentModel = value;
                 SetEditorValue();
-
             }
         }
 
@@ -94,7 +97,7 @@ namespace XafVsCodeEditor
         {
             if (_editor != null)
             {
-                if (componentModel.Code == null)
+                if (componentModel?.Code == null)
                 {
                     _editor?.SetValue("");
                 }
@@ -102,19 +105,18 @@ namespace XafVsCodeEditor
                 {
                     _editor?.SetValue(componentModel.Code);
                 }
-
             }
         }
+        
         private async Task ModelContentChange(ModelContentChangedEvent e)
         {
             var CodeContent = await _editor.GetValue();
             if (Value != null && Value.Code != CodeContent)
             {
                 Value.Code = CodeContent;
-
-
             }
         }
+        
         private void OnContextMenu(EditorMouseEvent eventArg)
         {
             Console.WriteLine("OnContextMenu : " + System.Text.Json.JsonSerializer.Serialize(eventArg));
@@ -135,6 +137,7 @@ namespace XafVsCodeEditor
                 Console.WriteLine("Ctrl+D : Editor action is triggered.");
             });
         }
+        
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -142,13 +145,23 @@ namespace XafVsCodeEditor
             Themes.Add(new MonacoTheme("Visual Studio", "vs"));
             Themes.Add(new MonacoTheme("Visual Studio Dark", "vs-dark"));
             Themes.Add(new MonacoTheme("High Contrast Black", "hc-black"));
+            
             SelectedThemeChanged = async (i) =>
             {
                 await MonacoEditorBase.SetTheme(i.PropertyValue);
-                //this.ComponentModel.SourceCode.Theme = i.PropertyValue;
                 Console.WriteLine(i);
             };
+        }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender && _editor != null)
+            {
+                // Ensure proper layout after first render
+                await Task.Delay(50);
+                await _editor.Layout();
+            }
+            await base.OnAfterRenderAsync(firstRender);
         }
     }
 }

@@ -16,6 +16,7 @@
 
         BlazorWebView control;
         Dictionary<string, object> parameters;
+        
         protected override void ReadValueCore()
         {
             if (control != null)
@@ -24,12 +25,15 @@
                 {
                     var CurrentSourceCode = ((IMonacoEditorData)parameters["Value"]);
                     var CurrentProperty = (IMonacoEditorData)PropertyValue;
-                    CurrentSourceCode.Code = CurrentProperty.Code;
-                    CurrentSourceCode.Language = CurrentProperty.Language;
+                    if (CurrentProperty != null)
+                    {
+                        CurrentSourceCode.Code = CurrentProperty.Code;
+                        CurrentSourceCode.Language = CurrentProperty.Language;
+                    }
                 }
-               
             }
         }
+        
         private void control_ValueChanged(object sender, EventArgs e)
         {
             if (!IsValueReading)
@@ -41,44 +45,49 @@
 
         protected override object CreateControlCore()
         {
-
             control = new BlazorWebView();
             control.Dock = DockStyle.Fill;
+            
             var services = new ServiceCollection();
             services.AddWindowsFormsBlazorWebView();
-            //services.AddMonacoEditorComponent();
-            control.HostPage = "wwwroot\\index.html";
-            var tags = MonacoEditorTagHelper.AddScriptTags;
             control.Services = services.BuildServiceProvider();
+            control.HostPage = "wwwroot\\index.html";
+            
             parameters = new Dictionary<string, object>();
             if (PropertyValue == null)
             {
-
                 PropertyValue = new MonacoEditorData() { Language = "markdown" };
-
             }
 
+            // Add height parameter to ensure proper sizing
             parameters.Add("Value", PropertyValue);
+            parameters.Add("Height", "100%");
+            parameters.Add("Width", "100%");
+            
             control.RootComponents.Add<MonacoEditorComponent>("#app", parameters);
 
-            control.Size = new System.Drawing.Size(300, 300);
+            // Set minimum size but allow it to grow
+            control.MinimumSize = new System.Drawing.Size(300, 200);
+            control.Size = new System.Drawing.Size(600, 300); // Better default size
+            
             return control;
-
         }
+        
         protected override void OnControlCreated()
         {
             base.OnControlCreated();
             ReadValue();
         }
+        
         public MonacoPropertyEditorWin(Type objectType, IModelMemberViewItem info)
             : base(objectType, info)
         {
         }
+        
         protected override void Dispose(bool disposing)
         {
             if (control != null)
             {
-                //control.ValueChanged -= control_ValueChanged;
                 control = null;
             }
             base.Dispose(disposing);

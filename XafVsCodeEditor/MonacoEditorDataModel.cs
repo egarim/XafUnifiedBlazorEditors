@@ -29,7 +29,18 @@ namespace XafVsCodeEditor
             set => SetPropertyValue(value);
         }
 
-      
+        public string Height
+        {
+            get => GetPropertyValue<string>();
+            set => SetPropertyValue(value);
+        }
+
+        public string Width
+        {
+            get => GetPropertyValue<string>();
+            set => SetPropertyValue(value);
+        }
+
         public override Type ComponentType => typeof(MonacoEditorComponent);
     }
 }
